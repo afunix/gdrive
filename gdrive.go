@@ -49,11 +49,13 @@ func main() {
 			Name:        "clientId",
 			Patterns:    []string{"--client-id"},
 			Description: "Client ID (https://github.com/prasmussen/gdrive/issues/426)",
+			DefaultValue: os.Getenv("GDRIVE_CLIENT_ID"),
 		},
 		cli.StringFlag{
 			Name:        "clientSecret",
 			Patterns:    []string{"--client-secret"},
 			Description: "Client Secret (https://github.com/prasmussen/gdrive/issues/426)",
+			DefaultValue: os.Getenv("GDRIVE_CLIENT_SECRET"),
 		},
 	}
 
