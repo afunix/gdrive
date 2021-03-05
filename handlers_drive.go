@@ -14,8 +14,6 @@ import (
 	"github.com/afunix/gdrive/drive"
 )
 
-const ClientId = "367116221053-7n0vf5akeru7on6o2fjinrecpdoe99eg.apps.googleusercontent.com"
-const ClientSecret = "1qsNodXNaWq1mQuBjUjmvhoO"
 const TokenFilename = "token_v2.json"
 const DefaultCacheFileName = "file_cache.json"
 
@@ -341,16 +339,19 @@ func aboutExportHandler(ctx cli.Context) {
 }
 
 func getOauthClient(args cli.Arguments) (*http.Client, error) {
+	if args.String("clientId") == "" || args.String("clientSecret") == "" {
+		ExitF("ClientID and ClientSecret are required")
+	}
 	if args.String("refreshToken") != "" && args.String("accessToken") != "" {
 		ExitF("Access token not needed when refresh token is provided")
 	}
 
 	if args.String("refreshToken") != "" {
-		return auth.NewRefreshTokenClient(ClientId, ClientSecret, args.String("refreshToken")), nil
+		return auth.NewRefreshTokenClient(args.String("clientId"), args.String("clientSecret"), args.String("refreshToken")), nil
 	}
 
 	if args.String("accessToken") != "" {
-		return auth.NewAccessTokenClient(ClientId, ClientSecret, args.String("accessToken")), nil
+		return auth.NewAccessTokenClient(args.String("clientId"), args.String("clientSecret"), args.String("accessToken")), nil
 	}
 
 	configDir := getConfigDir(args)
@@ -365,7 +366,7 @@ func getOauthClient(args cli.Arguments) (*http.Client, error) {
 	}
 
 	tokenPath := ConfigFilePath(configDir, TokenFilename)
-	return auth.NewFileSourceClient(ClientId, ClientSecret, tokenPath, authCodePrompt)
+	return auth.NewFileSourceClient(args.String("clientId"), args.String("clientSecret"), tokenPath, authCodePrompt)
 }
 
 func getConfigDir(args cli.Arguments) string {

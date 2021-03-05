@@ -45,6 +45,16 @@ func main() {
 			Patterns:    []string{"--service-account"},
 			Description: "Oauth service account filename, used for server to server communication without user interaction (filename path is relative to config dir)",
 		},
+		cli.StringFlag{
+			Name:        "clientId",
+			Patterns:    []string{"--client-id"},
+			Description: "Client ID (https://github.com/prasmussen/gdrive/issues/426)",
+		},
+		cli.StringFlag{
+			Name:        "clientSecret",
+			Patterns:    []string{"--client-secret"},
+			Description: "Client Secret (https://github.com/prasmussen/gdrive/issues/426)",
+		},
 	}
 
 	handlers := []*cli.Handler{
